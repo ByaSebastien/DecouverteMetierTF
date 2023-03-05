@@ -4,6 +4,14 @@ using System.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+{
+    builder.WithOrigins("http://localhost:4200")
+           .AllowAnyMethod()
+           .AllowAnyHeader()
+           .AllowCredentials();
+}));
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -21,12 +29,16 @@ builder.Services.AddScoped<IDbConnection>(sp =>
 
 var app = builder.Build();
 
+// ajout cors permettant n'importe quel site d'accéder à l'API
+app.UseCors("MyPolicy");
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 
