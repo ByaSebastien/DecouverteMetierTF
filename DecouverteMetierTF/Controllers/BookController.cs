@@ -118,5 +118,18 @@ namespace DecouverteMetierTF.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("category/{categoryId}")]
+        public IActionResult GetByCategory(int categoryId)
+        {
+            try
+            {
+                IEnumerable<Book> books = _bookRepository.GetByCategory(categoryId);
+                return Ok(books);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

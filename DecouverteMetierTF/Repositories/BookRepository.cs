@@ -105,5 +105,26 @@ namespace DecouverteMetierTF.Repositories
                 return books;
             }
         }
+        public IEnumerable<Book> GetByCategory(int categoryId)
+        {
+            using (IDbCommand command = _Connection.CreateCommand())
+            {
+                ICollection<Book> books = new List<Book>();
+                command.CommandText = "SELECT * " +
+                                      "FROM Book " +
+                                      "WHERE CategoryId = @categoryId";
+                GenerateParameter(command, "@categoryId", categoryId);
+                _Connection.Open();
+                using (IDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        books.Add(Convert(reader));
+                    }
+                }
+                _Connection.Close();
+                return books;
+            }
+        }
     }
 }
